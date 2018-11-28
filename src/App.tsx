@@ -1,5 +1,8 @@
 import * as React from 'react';
 import './App.css';
+import { storage } from './firebase';
+
+console.log(storage)
 
 import logo from './logo.svg';
 
