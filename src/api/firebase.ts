@@ -12,7 +12,6 @@ const config = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET
 };
 
-
 firebase.initializeApp(config);
 firebase.auth().signInAnonymously()
   .then(res => console.log('success!', res))

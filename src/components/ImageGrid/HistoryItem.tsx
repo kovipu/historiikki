@@ -1,11 +1,12 @@
 import { Card } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { storage } from '../../firebase';
+import { getImageURL } from '../../api';
+import { MediaItem } from '../../globals';
 
 interface IProps {
   id: string,
-  media: any[]
+  media: MediaItem[]
 }
 
 interface IState {
@@ -17,12 +18,13 @@ export default class HistoryItem extends React.Component<IProps, IState> {
     super(props);
 
     this.state = { imageURL: '' };
+  }
 
+  public componentDidMount() {
     const id = this.props.id;
     const filename = this.props.media[0].filename;
 
-    storage.ref(`images/${id}/${filename}`)
-      .getDownloadURL()
+    getImageURL(id, filename)
       .then(imageURL => this.setState({ imageURL }))
       .catch(err => console.error(err));
   }
