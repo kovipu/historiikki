@@ -43,7 +43,12 @@ class HistoryItem extends React.Component<Props, State> {
   public render() {
     const { classes, item } = this.props;
     const thumbItem = item.media[0];
-    const thumbnail = generateThumbnail(thumbItem.type, this.state.imageURL, classes);
+    const thumbnail = generateThumbnail(
+      thumbItem.type, 
+      this.state.imageURL, 
+      thumbItem.filename, 
+      classes
+    );
 
     return (
       <Paper className={classes.paper} square={true}>
@@ -60,7 +65,7 @@ class HistoryItem extends React.Component<Props, State> {
   }
 }
 
-const generateThumbnail = (type: number, imageURL: string, classes: any) => {
+const generateThumbnail = (type: number, imageURL: string, filename: string, classes: any) => {
   switch(type) {
     // Image
     case 0:
@@ -68,10 +73,7 @@ const generateThumbnail = (type: number, imageURL: string, classes: any) => {
         <div 
           className={classes.thumbnail}
           style={{
-            backgroundImage: `url(${imageURL})`,
-            backgroundPosition: '50% 50%',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
+            backgroundImage: `url(${imageURL})`
           }}
         />
       );
@@ -81,6 +83,16 @@ const generateThumbnail = (type: number, imageURL: string, classes: any) => {
         <div className={classes.thumbnail}>
           <Icon className={classes.icon}>audiotrack</Icon>
         </div>
+      );
+    // Video
+    case 2:
+      return (
+        <div
+          className={classes.thumbnail}
+          style={{
+            backgroundImage: `url(https://img.youtube.com/vi/${filename}/0.jpg)`
+          }}
+        />
       );
     default:
       console.error('Error! Unknown media type.');
@@ -97,11 +109,14 @@ const styles = (theme: Theme) => createStyles({
     height: 0,
     width: '100%',
     paddingBottom: '100%',
-    backgroundColor: theme.palette.primary.light
+    backgroundColor: theme.palette.primary.light,
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover'
   },
   icon: {
-    paddingTop: '50%',
-    fontSize: 30
+    paddingTop: '45%',
+    fontSize: 42
   }
 });
 
