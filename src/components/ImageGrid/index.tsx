@@ -4,6 +4,7 @@ import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
 import HistoryItem from './HistoryItem';
+import ItemView from '../ItemView';
 import { Item } from '../../globals';
 import { getItems } from '../../api';
 
@@ -16,7 +17,8 @@ interface Props {
 
 interface State {
   isLoading: boolean,
-  items: Item[]
+  items: Item[],
+  selected: Item | null
 }
 
 class ImageGrid extends React.Component<Props, State> {
@@ -25,7 +27,8 @@ class ImageGrid extends React.Component<Props, State> {
 
     this.state = {
       isLoading: false,
-      items: []
+      items: [],
+      selected: null
     };
   }
 
@@ -37,30 +40,45 @@ class ImageGrid extends React.Component<Props, State> {
 
   public render() {
     const { classes } = this.props;
+    const openItemView = (selected: Item) => this.setState({ selected });
+    const closeItemView = () => this.setState({ selected: null });
+
+    const itemView = (
+      <ItemView
+        open={this.state.selected !== null}
+        handleClose={closeItemView}
+        item={this.state.selected}
+      />
+    )
+
     return (
-      <div className={classes.root}>
-        <Grid
-          container={true}
-          spacing={16}
-          className={classes.grid}
-        >
-          {
-            this.state.isLoading
-              ? 'Ladataan...'
-              : this.state.items.map((item: Item) => (
-                <Grid
-                  key={item.id}
-                  item={true}
-                  xs={12} sm={6} md={4} lg={3}
-                >
-                  <HistoryItem
-                    item={item}
-                  />
-                </Grid>
-              ))
-          }
-        </Grid>
-      </div>
+      <>
+        <div className={classes.root}>
+          <Grid
+            container={true}
+            spacing={16}
+            className={classes.grid}
+          >
+            {
+              this.state.isLoading
+                ? 'Ladataan...'
+                : this.state.items.map((item: Item) => (
+                  <Grid
+                    key={item.id}
+                    item={true}
+                    xs={12} sm={6} md={4} lg={3}
+                  >
+                    <HistoryItem
+                      item={item}
+                      openItemView={openItemView}
+                    />
+                  </Grid>
+                ))
+            }
+          </Grid>
+        </div>
+        {itemView}
+      </>
     );
   }
 }

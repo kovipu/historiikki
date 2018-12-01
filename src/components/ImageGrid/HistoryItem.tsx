@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import ButtonBase from '@material-ui/core/ButtonBase';
 import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -10,7 +11,9 @@ import { getImageURL } from '../../api';
 
 interface Props {
   item: Item,
+  openItemView: (item: Item) => void,
   classes: {
+    buttonbase: string,
     paper: string,
     thumbnail: string,
     icon: string
@@ -41,36 +44,39 @@ class HistoryItem extends React.Component<Props, State> {
   }
 
   public render() {
-    const { classes, item } = this.props;
+    const { classes, item, openItemView } = this.props;
+    const handleClick = () => openItemView(item);
     const thumbItem = item.media[0];
     const thumbnail = generateThumbnail(
-      thumbItem.type, 
-      this.state.imageURL, 
-      thumbItem.filename, 
+      thumbItem.type,
+      this.state.imageURL,
+      thumbItem.filename,
       classes
     );
 
     return (
       <Paper className={classes.paper} square={true}>
-        {thumbnail}
-        <Typography
-          component="h2"
-          variant="subtitle1"
-          gutterBottom={true}
-        >
-          {item.name}
-        </Typography>
+        <ButtonBase className={classes.buttonbase} onClick={handleClick}>
+          {thumbnail}
+          <Typography
+            component="h2"
+            variant="subtitle1"
+            gutterBottom={true}
+          >
+            {item.name}
+          </Typography>
+        </ButtonBase>
       </Paper>
     );
   }
 }
 
 const generateThumbnail = (type: number, imageURL: string, filename: string, classes: any) => {
-  switch(type) {
+  switch (type) {
     // Image
     case 0:
       return (
-        <div 
+        <div
           className={classes.thumbnail}
           style={{
             backgroundImage: `url(${imageURL})`
@@ -101,6 +107,10 @@ const generateThumbnail = (type: number, imageURL: string, filename: string, cla
 }
 
 const styles = (theme: Theme) => createStyles({
+  buttonbase: {
+    display: 'block',
+    width: '100%'
+  },
   paper: {
     textAlign: 'center',
     color: theme.palette.text.secondary,
