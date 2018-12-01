@@ -6,6 +6,7 @@ const getItems = (): Promise<Item[]> =>
     db.collection('items').get()
       .then(snapshot => {
         const items: Item[] = [];
+        
         snapshot.forEach(doc => {
           const item = { id: doc.id, ...doc.data() } as Item;
           items.push(item)

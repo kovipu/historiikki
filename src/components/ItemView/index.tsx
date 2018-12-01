@@ -42,6 +42,7 @@ const ItemView = (props: Props) => {
         <DialogContentText>
           {item.description}
         </DialogContentText>
+        
       </DialogContent>
 
       <DialogActions>

@@ -34,7 +34,7 @@ class HistoryItem extends React.Component<Props, State> {
   public componentDidMount() {
     const id = this.props.item.id;
     const filename = this.props.item.media[0].filename;
-    const isImage = this.props.item.media[0].type === 0;
+    const isImage = this.props.item.media[0].type === 'image';
 
     if (isImage) {
       getImageURL(id, filename)
@@ -71,10 +71,9 @@ class HistoryItem extends React.Component<Props, State> {
   }
 }
 
-const generateThumbnail = (type: number, imageURL: string, filename: string, classes: any) => {
+const generateThumbnail = (type: string, imageURL: string, filename: string, classes: any) => {
   switch (type) {
-    // Image
-    case 0:
+    case 'image':
       return (
         <div
           className={classes.thumbnail}
@@ -83,15 +82,13 @@ const generateThumbnail = (type: number, imageURL: string, filename: string, cla
           }}
         />
       );
-    // Audio
-    case 1:
+    case 'audio':
       return (
         <div className={classes.thumbnail}>
           <Icon className={classes.icon}>audiotrack</Icon>
         </div>
       );
-    // Video
-    case 2:
+    case 'video':
       return (
         <div
           className={classes.thumbnail}
@@ -101,7 +98,7 @@ const generateThumbnail = (type: number, imageURL: string, filename: string, cla
         />
       );
     default:
-      console.error('Error! Unknown media type.');
+      console.error('Error! Unknown media type:', type);
       return null;
   }
 }

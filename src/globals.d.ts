@@ -11,5 +11,5 @@ export interface Item {
 export interface MediaItem {
   name: string,
   filename: string,
-  type: number
+  type: "image" | "audio" | "video"
 }
