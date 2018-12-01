@@ -10,6 +10,7 @@ import Slide from '@material-ui/core/Slide';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 
 import { Item } from '../../globals';
+import Medium from './Medium';
 
 interface Props {
   open: boolean,
@@ -42,6 +43,15 @@ const ItemView = (props: Props) => {
         <DialogContentText>
           {item.description}
         </DialogContentText>
+        {
+          item.media.map(mediaItem => (
+            <Medium
+              key={mediaItem.filename}
+              itemId={item.id}
+              mediaItem={mediaItem}
+            />
+          ))
+        }
         
       </DialogContent>
 

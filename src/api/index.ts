@@ -6,7 +6,7 @@ const getItems = (): Promise<Item[]> =>
     db.collection('items').get()
       .then(snapshot => {
         const items: Item[] = [];
-        
+
         snapshot.forEach(doc => {
           const item = { id: doc.id, ...doc.data() } as Item;
           items.push(item)
@@ -21,4 +21,8 @@ const getImageURL = (itemId: string, filename: string): Promise<string> =>
   storage.ref(`images/${itemId}/${filename}`)
     .getDownloadURL()
 
-export { getItems, getImageURL }
+const getAudioURL = (itemId: string, filename: string): Promise<string> =>
+  storage.ref(`audio/${itemId}/${filename}`)
+    .getDownloadURL()
+
+export { getItems, getImageURL, getAudioURL }
