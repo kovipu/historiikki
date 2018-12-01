@@ -1,5 +1,3 @@
-export as namespace api;
-
 export interface Item {
   name: string,
   description: string,

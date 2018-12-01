@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 import { MediaItem } from '../../globals';
 import { getImageURL, getAudioURL } from '../../api';
@@ -56,6 +57,13 @@ class Medium extends React.Component<Props, State> {
     return (
       <div>
         {embeddedMedia}
+        <Typography
+          component="h2"
+          variant="subtitle1"
+          gutterBottom={true}
+        >
+          {this.props.mediaItem.name}
+        </Typography>
       </div>
     )
   }
@@ -71,14 +79,24 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
         />
       );
     case 'audio':
-      return null;
+      return (
+        address === ''
+          ? 'Ladataan...'
+          : (
+            <audio controls={true}>
+              <source src={address} type="audio/ogg" />
+              Your browser does not support the audio element.
+            </audio>
+          )
+      )
     case 'video':
       return (
         <div className={classes.aspectratio}>
           <iframe
             className={classes.video}
             src={address}
-            frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            frameBorder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen={true}
           />
         </div>
