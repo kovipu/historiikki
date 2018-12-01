@@ -1,16 +1,26 @@
 import * as React from 'react';
 
-import { getItems } from '../../api';
-import { Item } from '../../globals';
-import HistoryItem from './HistoryItem';
+import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 
-interface IState {
+import Grid from '@material-ui/core/Grid';
+import HistoryItem from './HistoryItem';
+import { Item } from '../../globals';
+import { getItems } from '../../api';
+
+interface Props {
+  classes: {
+    root: string,
+    grid: string
+  }
+}
+
+interface State {
   isLoading: boolean,
   items: Item[]
 }
 
-class ImageGrid extends React.Component<{}, IState> {
-  constructor(props: {}) {
+class ImageGrid extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -26,17 +36,45 @@ class ImageGrid extends React.Component<{}, IState> {
   }
 
   public render() {
+    const { classes } = this.props;
     return (
-      this.state.isLoading
-        ? 'Ladataan...'
-        : this.state.items.map((item: Item) => (
-          <HistoryItem
-            key={item.id}
-            id={item.id}
-            media={item.media}
-          />
-        ))
+      <div className={classes.root}>
+        <Grid
+          container={true}
+          spacing={16}
+          className={classes.grid}
+        >
+          {
+            this.state.isLoading
+              ? 'Ladataan...'
+              : this.state.items.map((item: Item) => (
+                <Grid
+                  key={item.id}
+                  item={true}
+                  xs={12} sm={6} md={4} lg={3}
+                >
+                  <HistoryItem
+                    item={item}
+                  />
+                </Grid>
+              ))
+          }
+        </Grid>
+      </div>
     );
   }
 }
-export default ImageGrid;
+
+const styles = (theme: Theme) => createStyles({
+  root: {
+    flexGrow: 1,
+    padding: '16px'
+  },
+  grid: {
+    margin: 0,
+    width: '100%'
+  }
+});
+
+
+export default withStyles(styles)(ImageGrid);

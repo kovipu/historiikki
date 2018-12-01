@@ -14,7 +14,6 @@ const config = {
 
 firebase.initializeApp(config);
 firebase.auth().signInAnonymously()
-  .then(res => console.log('success!', res))
   .catch(err => console.error(err));
 
 const db = firebase.firestore();
