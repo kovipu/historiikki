@@ -17,7 +17,8 @@ interface Props {
   handleClose: () => void,
   item: Item | null,
   classes: {
-    dialog: string
+    dialog: string,
+    content: string
   }
 }
 
@@ -39,7 +40,7 @@ const ItemView = (props: Props) => {
         {item.name}
       </DialogTitle>
 
-      <DialogContent>
+      <DialogContent className={classes.content}>
         <DialogContentText>
           {item.description}
         </DialogContentText>
@@ -62,16 +63,27 @@ const ItemView = (props: Props) => {
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 const Transition = (props: any) =>
-  <Slide direction="right" {...props} />
+  <Slide direction="up" {...props} />;
 
 const styles = (theme: Theme) => createStyles({
   dialog: {
     paddingRight: '0 !important',
     textAlign: 'center',
+  },
+  content: {
+    padding: 0,
+    [theme.breakpoints.up('md')]: {
+      paddingLeft: '15%',
+      paddingRight: '15%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      paddingLeft: '30%',
+      paddingRight: '30%'
+    }
   }
-})
+});
 
 export default withStyles(styles)(ItemView);

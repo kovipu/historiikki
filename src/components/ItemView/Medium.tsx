@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { MediaItem } from '../../globals';
 import { getImageURL, getAudioURL } from '../../api';
+import {Icon} from "@material-ui/core";
 
 interface Props {
   itemId: string,
@@ -25,7 +26,7 @@ class Medium extends React.Component<Props, State> {
   public state: State = {
     isLoading: false,
     address: ''
-  }
+  };
 
   public componentDidMount() {
     const { itemId } = this.props;
@@ -55,14 +56,22 @@ class Medium extends React.Component<Props, State> {
     );
 
     return (
-      <div>
+      <div style={{ textAlign: 'left' }}>
         {embeddedMedia}
         <Typography
           component="h2"
           variant="subtitle1"
-          gutterBottom={true}
         >
+          <Icon>description</Icon>
           {this.props.mediaItem.name}
+        </Typography>
+        <Typography
+            component="h2"
+            variant="subtitle1"
+            gutterBottom={true}
+        >
+          <Icon>calendar_today</Icon>
+          {this.props.mediaItem.date}
         </Typography>
       </div>
     )
@@ -74,6 +83,7 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
     case 'image':
       return (
         <img
+          alt="embedded image"
           src={address}
           className={classes.image}
         />
@@ -88,7 +98,7 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
               Your browser does not support the audio element.
             </audio>
           )
-      )
+      );
     case 'video':
       return (
         <div className={classes.aspectratio}>
@@ -102,7 +112,7 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
         </div>
       );
   }
-}
+};
 
 const styles = (theme: Theme) => createStyles({
   image: {

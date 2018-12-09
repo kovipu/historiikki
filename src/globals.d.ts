@@ -9,5 +9,6 @@ export interface Item {
 export interface MediaItem {
   name: string,
   filename: string,
+  date: string,
   type: "image" | "audio" | "video"
 }
