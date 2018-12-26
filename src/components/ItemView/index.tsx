@@ -8,9 +8,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
 
-import { Item } from '../../globals';
+import { Item } from '../../@types/globals';
 import Medium from './Medium';
+import AddNewMedium from './AddNewMedium';
 
 interface Props {
   open: boolean,
@@ -53,7 +55,9 @@ const ItemView = (props: Props) => {
             />
           ))
         }
-        
+
+        <Divider/>
+        <AddNewMedium itemId={item.id}/>
       </DialogContent>
 
       <DialogActions>

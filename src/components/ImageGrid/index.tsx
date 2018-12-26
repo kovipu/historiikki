@@ -5,7 +5,7 @@ import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import HistoryItem from './HistoryItem';
 import ItemView from '../ItemView';
-import { Item } from '../../globals';
+import { Item } from '../../@types/globals';
 import { getItems } from '../../api';
 
 interface Props {

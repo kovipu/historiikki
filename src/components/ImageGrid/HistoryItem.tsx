@@ -6,7 +6,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 
-import { Item } from '../../globals';
+import { Item } from '../../@types/globals';
 import { getImageURL } from '../../api';
 
 interface Props {
@@ -101,7 +101,7 @@ const generateThumbnail = (type: string, imageURL: string, filename: string, cla
       console.error('Error! Unknown media type:', type);
       return null;
   }
-}
+};
 
 const styles = (theme: Theme) => createStyles({
   buttonbase: {

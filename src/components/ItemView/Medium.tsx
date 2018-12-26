@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import { MediaItem } from '../../globals';
+import { MediaItem } from '../../@types/globals';
 import { getImageURL, getAudioURL } from '../../api';
 import {Icon} from "@material-ui/core";
 
@@ -11,6 +11,8 @@ interface Props {
   itemId: string,
   mediaItem: MediaItem,
   classes: {
+    medium: string,
+    metadata: string,
     image: string,
     video: string,
     aspectratio: string
@@ -56,23 +58,25 @@ class Medium extends React.Component<Props, State> {
     );
 
     return (
-      <div style={{ textAlign: 'left' }}>
+      <div className={this.props.classes.medium}>
         {embeddedMedia}
-        <Typography
-          component="h2"
-          variant="subtitle1"
-        >
-          <Icon>description</Icon>
-          {this.props.mediaItem.name}
-        </Typography>
-        <Typography
+        <div className={this.props.classes.metadata}>
+          <Typography
             component="h2"
             variant="subtitle1"
-            gutterBottom={true}
-        >
-          <Icon>calendar_today</Icon>
-          {this.props.mediaItem.date}
-        </Typography>
+          >
+            <Icon>description</Icon>
+            {this.props.mediaItem.name}
+          </Typography>
+          <Typography
+              component="h2"
+              variant="subtitle1"
+              gutterBottom={true}
+          >
+            <Icon>calendar_today</Icon>
+            {this.props.mediaItem.date}
+          </Typography>
+        </div>
       </div>
     )
   }
@@ -115,6 +119,12 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
 };
 
 const styles = (theme: Theme) => createStyles({
+  medium: {
+    textAlign: 'left',
+  },
+  metadata: {
+    padding: theme.spacing.unit
+  },
   image: {
     width: '100%'
   },

@@ -1,4 +1,4 @@
-import { Item } from '../globals';
+import { Item, MediaItem } from '../@types/globals';
 import { db, storage } from './firebase';
 
 const getItems = (): Promise<Item[]> =>
@@ -18,11 +18,37 @@ const getItems = (): Promise<Item[]> =>
   });
 
 const getImageURL = (itemId: string, filename: string): Promise<string> =>
-  storage.ref(`images/${itemId}/${filename}`)
-    .getDownloadURL()
+  storage.ref(`image/${itemId}/${filename}`)
+    .getDownloadURL();
 
 const getAudioURL = (itemId: string, filename: string): Promise<string> =>
   storage.ref(`audio/${itemId}/${filename}`)
-    .getDownloadURL()
+    .getDownloadURL();
 
-export { getItems, getImageURL, getAudioURL }
+const newMediaItem = (itemId: string, mediaItem: MediaItem): Promise<any> =>
+  db.collection('items')
+    .doc(itemId)
+    .get()
+    .then(doc => {
+      const oldMedia = doc.data() ? doc.data()!!.media : [];
+      const data = {
+        ...doc.data(),
+        media: [
+          ...oldMedia,
+          mediaItem
+        ]
+      };
+      return db.collection('items')
+        .doc(itemId)
+        .set(data)
+    });
+
+const uploadFile = (itemId: string, type: 'image' | 'audio', file: File): Promise<any> =>
+  new Promise((resolve, reject) => {
+    storage.ref(`${type}/${itemId}/${file.name}`)
+      .put(file)
+      .then(res => resolve(res))
+      .catch(err => reject(err))
+  });
+
+export { getItems, getImageURL, getAudioURL, newMediaItem, uploadFile }
