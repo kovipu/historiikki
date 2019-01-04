@@ -9,8 +9,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
-import {Icon} from "@material-ui/core";
-import {MediaItem} from "../../@types/globals";
+import Icon from '@material-ui/core/Icon';
+
+import { MediaItem } from '../../@types/globals';
 
 import { newMediaItem, uploadFile } from '../../api';
 
@@ -42,10 +43,8 @@ class AddNewMedium extends React.Component<Props, State> {
   };
 
   public render () {
-    console.log(this.state.file)
     return (
       <FormControl className={this.props.classes.mediumForm}>
-        <Typography variant="h5">Uusi liite</Typography>
         <RadioGroup
           value={this.state.type}
           onChange={this.handleTypeChange}

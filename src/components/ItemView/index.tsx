@@ -9,6 +9,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
+import Collapse from '@material-ui/core/Collapse';
+import Icon from '@material-ui/core/Icon';
 
 import { Item } from '../../@types/globals';
 import Medium from './Medium';
@@ -20,53 +22,77 @@ interface Props {
   item: Item | null,
   classes: {
     dialog: string,
-    content: string
+    content: string,
+    newFileButton: string
   }
 }
 
-const ItemView = (props: Props) => {
-  const { open, handleClose, item, classes } = props;
+interface State {
+  addingFile: boolean
+}
 
-  if (item === null) {
-    return null;
+class ItemView extends React.Component<Props, State> {
+  public state = {
+    addingFile: false
+  };
+
+  public render() {
+    const {open, handleClose, item, classes} = this.props;
+
+    if (item === null) {
+      return null;
+    }
+
+    const handleAddItemClick = () => this.setState({
+      addingFile: !this.state.addingFile
+    });
+
+    return (
+      <Dialog
+        fullScreen={true}
+        open={open}
+        TransitionComponent={Transition}
+        className={classes.dialog}
+      >
+        <DialogTitle>
+          {item.name}
+        </DialogTitle>
+
+        <DialogContent className={classes.content}>
+          <DialogContentText>
+            {item.description}
+          </DialogContentText>
+          {
+            item.media.map(mediaItem => (
+              <Medium
+                key={mediaItem.filename}
+                itemId={item.id}
+                mediaItem={mediaItem}
+              />
+            ))
+          }
+
+          <Divider/>
+
+          <Button
+            onClick={handleAddItemClick}
+            className={classes.newFileButton}
+          >
+            <Icon>add</Icon> Lisää uusi liite
+          </Button>
+          <Collapse in={this.state.addingFile}>
+            <AddNewMedium itemId={item.id}/>
+          </Collapse>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Pois
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
-
-  return (
-    <Dialog
-      fullScreen={true}
-      open={open}
-      TransitionComponent={Transition}
-      className={classes.dialog}
-    >
-      <DialogTitle>
-        {item.name}
-      </DialogTitle>
-
-      <DialogContent className={classes.content}>
-        <DialogContentText>
-          {item.description}
-        </DialogContentText>
-        {
-          item.media.map(mediaItem => (
-            <Medium
-              key={mediaItem.filename}
-              itemId={item.id}
-              mediaItem={mediaItem}
-            />
-          ))
-        }
-
-        <Divider/>
-        <AddNewMedium itemId={item.id}/>
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Pois
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
 };
 
 const Transition = (props: any) =>
@@ -87,6 +113,9 @@ const styles = (theme: Theme) => createStyles({
       paddingLeft: '30%',
       paddingRight: '30%'
     }
+  },
+  newFileButton: {
+    marginTop: theme.spacing.unit
   }
 });
 
