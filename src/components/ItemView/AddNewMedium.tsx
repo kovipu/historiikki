@@ -17,6 +17,7 @@ import { newMediaItem, uploadFile } from '../../api';
 
 interface Props {
   itemId: string,
+  updateItems: () => void,
   classes: {
     mediumForm: string,
     textField: string,
@@ -168,7 +169,7 @@ class AddNewMedium extends React.Component<Props, State> {
     }
 
     newMediaItem(this.props.itemId, mediaItem)
-      .then(res => console.log('Media added successfully!', res))
+      .then(res => this.props.updateItems())
       .catch(err => console.error(err));
   }
 }

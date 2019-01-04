@@ -11,7 +11,7 @@ import { getImageURL } from '../../api';
 
 interface Props {
   item: Item,
-  openItemView: (item: Item) => void,
+  openItemView: (item: string) => void,
   classes: {
     buttonbase: string,
     paper: string,
@@ -45,7 +45,7 @@ class HistoryItem extends React.Component<Props, State> {
 
   public render() {
     const { classes, item, openItemView } = this.props;
-    const handleClick = () => openItemView(item);
+    const handleClick = () => openItemView(item.id);
     const thumbItem = item.media[0];
     const thumbnail = generateThumbnail(
       thumbItem.type,

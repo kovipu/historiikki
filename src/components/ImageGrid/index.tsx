@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
+import * as R from 'ramda';
 
 import Grid from '@material-ui/core/Grid';
 import HistoryItem from './HistoryItem';
@@ -18,7 +19,7 @@ interface Props {
 interface State {
   isLoading: boolean,
   items: Item[],
-  selected: Item | null
+  selected: string
 }
 
 class ImageGrid extends React.Component<Props, State> {
@@ -28,28 +29,28 @@ class ImageGrid extends React.Component<Props, State> {
     this.state = {
       isLoading: false,
       items: [],
-      selected: null
+      selected: ''
     };
   }
 
   public componentDidMount() {
-    getItems()
-      .then(items => this.setState({ items }))
-      .catch(err => console.error(err));
+    this.updateItems();
   }
 
   public render() {
     const { classes } = this.props;
-    const openItemView = (selected: Item) => this.setState({ selected });
-    const closeItemView = () => this.setState({ selected: null });
+    const openItemView = (selected: string) => this.setState({ selected });
+    const closeItemView = () => this.setState({ selected: '' });
+    const selectedItem = R.find((item: Item) => item.id === this.state.selected)(this.state.items);
 
     const itemView = (
       <ItemView
-        open={this.state.selected !== null}
+        open={this.state.selected !== ''}
         handleClose={closeItemView}
-        item={this.state.selected}
+        item={selectedItem}
+        updateItems={this.updateItems}
       />
-    )
+    );
 
     return (
       <>
@@ -81,6 +82,11 @@ class ImageGrid extends React.Component<Props, State> {
       </>
     );
   }
+
+  private updateItems = () =>
+    getItems()
+      .then(items => this.setState({ items }))
+      .catch(err => console.error(err));
 }
 
 const styles = (theme: Theme) => createStyles({

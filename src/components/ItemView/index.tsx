@@ -19,7 +19,8 @@ import AddNewMedium from './AddNewMedium';
 interface Props {
   open: boolean,
   handleClose: () => void,
-  item: Item | null,
+  item: Item | undefined,
+  updateItems: () => void,
   classes: {
     dialog: string,
     content: string,
@@ -39,7 +40,7 @@ class ItemView extends React.Component<Props, State> {
   public render() {
     const {open, handleClose, item, classes} = this.props;
 
-    if (item === null) {
+    if (item === undefined) {
       return null;
     }
 
@@ -81,7 +82,10 @@ class ItemView extends React.Component<Props, State> {
             <Icon>add</Icon> Lisää uusi liite
           </Button>
           <Collapse in={this.state.addingFile}>
-            <AddNewMedium itemId={item.id}/>
+            <AddNewMedium
+              itemId={item.id}
+              updateItems={this.props.updateItems}
+            />
           </Collapse>
         </DialogContent>
 
@@ -93,7 +97,7 @@ class ItemView extends React.Component<Props, State> {
       </Dialog>
     );
   }
-};
+}
 
 const Transition = (props: any) =>
   <Slide direction="up" {...props} />;
