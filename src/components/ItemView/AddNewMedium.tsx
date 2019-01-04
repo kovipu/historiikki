@@ -28,7 +28,8 @@ interface State {
   type: 'image' | 'audio' | 'video',
   name: string,
   date: any,
-  videoId: string
+  videoId: string,
+  file: File | null
 }
 
 class AddNewMedium extends React.Component<Props, State> {
@@ -36,13 +37,12 @@ class AddNewMedium extends React.Component<Props, State> {
     type: 'image',
     name: '',
     date: null,
-    videoId: ''
+    videoId: '',
+    file: null
   };
 
-  private fileInput = React.createRef<HTMLInputElement>();
-
   public render () {
-    console.log(this.fileInput.current && this.fileInput.current.files)
+    console.log(this.state.file)
     return (
       <FormControl className={this.props.classes.mediumForm}>
         <Typography variant="h5">Uusi liite</Typography>
@@ -97,19 +97,26 @@ class AddNewMedium extends React.Component<Props, State> {
                     style={{display: 'none'}}
                     id="raised-button-file"
                     type="file"
-                    ref={this.fileInput}
+                    onChange={this.handleFileChange}
                   />
                   <label htmlFor="raised-button-file">
-                    <Button component="span">
+                    <Button component="span" variant="contained">
                       Tiedosto <Icon className={this.props.classes.rightIcon}>attach_file</Icon>
                     </Button>
                   </label>
+                  {
+                    this.state.file && (
+                      <Typography variant="subtitle1">
+                        <Icon>insert_drive_file</Icon>{this.state.file.name}
+                      </Typography>
+                    )
+                  }
                 </>
               )
           }
 
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             disabled={this.validateSubmit()}
             onClick={this.handleSubmit}
@@ -133,24 +140,30 @@ class AddNewMedium extends React.Component<Props, State> {
   private handleVideoIdChange = (event: any) =>
     this.setState({ videoId: event.target.value });
 
-  private validateSubmit = () =>
-    this.state.name === ''
-    || !this.state.date
-    || (this.state.type === 'video' && this.state.videoId === '');
- //   || !!(this.fileInput.current && this.fileInput.current.files && this.fileInput.current.files.length === 0)
+  private handleFileChange = (event: any) =>
+    this.setState({ file: event.target.files[0] });
+
+  private validateSubmit = () => {
+    const { name, date, type, videoId, file } = this.state;
+
+    return name === ''
+      || !date
+      || (type === 'video' && videoId === '')
+      || ((type === 'image' || type === 'audio') && file === null)
+  };
 
   private handleSubmit = (event: any) => {
     event.preventDefault();
 
     const mediaItem: MediaItem = {
       name: this.state.name,
-      filename: this.fileInput.current!!.files!![0].name,
+      filename: this.state.file!!.name,
       date: this.state.date,
       type: this.state.type
     };
 
     if (this.state.type === 'image' || this.state.type === 'audio') {
-      uploadFile(this.props.itemId, this.state.type, this.fileInput.current!!.files!![0])
+      uploadFile(this.props.itemId, this.state.type, this.state.file!!)
         .then(res => console.log("File uploaded successfully!", res))
         .catch(err => console.error(err));
     }
