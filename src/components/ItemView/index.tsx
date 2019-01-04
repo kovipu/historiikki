@@ -24,6 +24,7 @@ interface Props {
   classes: {
     dialog: string,
     content: string,
+    contenttext: string,
     newFileButton: string
   }
 }
@@ -60,7 +61,7 @@ class ItemView extends React.Component<Props, State> {
         </DialogTitle>
 
         <DialogContent className={classes.content}>
-          <DialogContentText>
+          <DialogContentText className={classes.contenttext}>
             {item.description}
           </DialogContentText>
           {
@@ -117,6 +118,9 @@ const styles = (theme: Theme) => createStyles({
       paddingLeft: '30%',
       paddingRight: '30%'
     }
+  },
+  contenttext: {
+    marginBottom: theme.spacing.unit
   },
   newFileButton: {
     marginTop: theme.spacing.unit

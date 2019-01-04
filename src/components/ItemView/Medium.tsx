@@ -15,6 +15,7 @@ interface Props {
     metadata: string,
     image: string,
     video: string,
+    audio: string,
     aspectratio: string
   }
 }
@@ -33,7 +34,7 @@ class Medium extends React.Component<Props, State> {
   public componentDidMount() {
     const { itemId } = this.props;
     const { type, filename } = this.props.mediaItem;
-    const setAddress = (address: string) => this.setState({ address })
+    const setAddress = (address: string) => this.setState({ address });
     switch (type) {
       case 'image':
         getImageURL(itemId, filename)
@@ -86,21 +87,27 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
   switch (type) {
     case 'image':
       return (
-        <img
-          alt="embedded image"
-          src={address}
-          className={classes.image}
-        />
+        address === ''
+          ? 'Ladataan...'
+          : (
+            <img
+              alt="embedded image"
+              src={address}
+              className={classes.image}
+            />
+          )
       );
     case 'audio':
       return (
         address === ''
           ? 'Ladataan...'
           : (
+            <div className={classes.audio}>
             <audio controls={true}>
               <source src={address} type="audio/ogg" />
               Your browser does not support the audio element.
             </audio>
+            </div>
           )
       );
     case 'video':
@@ -134,6 +141,9 @@ const styles = (theme: Theme) => createStyles({
     height: '100%',
     left: 0,
     top: 0
+  },
+  audio: {
+    textAlign: 'center'
   },
   aspectratio: {
     position: 'relative',
