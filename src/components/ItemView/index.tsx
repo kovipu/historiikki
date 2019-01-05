@@ -11,21 +11,21 @@ import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Collapse from '@material-ui/core/Collapse';
 import Icon from '@material-ui/core/Icon';
+import Link from '../Link';
 
 import { Item } from '../../@types/globals';
 import Medium from './Medium';
 import AddNewMedium from './AddNewMedium';
 
 interface Props {
-  open: boolean,
-  handleClose: () => void,
   item: Item | undefined,
   updateItems: () => void,
   classes: {
     dialog: string,
     content: string,
     contenttext: string,
-    newFileButton: string
+    newFileButton: string,
+    exitbutton: string
   }
 }
 
@@ -39,7 +39,7 @@ class ItemView extends React.Component<Props, State> {
   };
 
   public render() {
-    const {open, handleClose, item, classes} = this.props;
+    const { item, classes} = this.props;
 
     if (item === undefined) {
       return null;
@@ -52,7 +52,7 @@ class ItemView extends React.Component<Props, State> {
     return (
       <Dialog
         fullScreen={true}
-        open={open}
+        open={true}
         TransitionComponent={Transition}
         className={classes.dialog}
       >
@@ -91,9 +91,11 @@ class ItemView extends React.Component<Props, State> {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Pois
-          </Button>
+          <Link to="/">
+            <Button color="primary" className="exitbutton">
+              Pois
+            </Button>
+          </Link>
         </DialogActions>
       </Dialog>
     );
@@ -124,6 +126,9 @@ const styles = (theme: Theme) => createStyles({
   },
   newFileButton: {
     marginTop: theme.spacing.unit
+  },
+  exitbutton: {
+    textDecoration: 'none'
   }
 });
 

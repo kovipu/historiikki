@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import ButtonBase from '@material-ui/core/ButtonBase';
 import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -11,7 +10,6 @@ import { getImageURL } from '../../api';
 
 interface Props {
   item: Item,
-  openItemView: (item: string) => void,
   classes: {
     buttonbase: string,
     paper: string,
@@ -44,8 +42,7 @@ class HistoryItem extends React.Component<Props, State> {
   }
 
   public render() {
-    const { classes, item, openItemView } = this.props;
-    const handleClick = () => openItemView(item.id);
+    const { classes, item } = this.props;
     const thumbItem = item.media[0];
     const thumbnail = generateThumbnail(
       thumbItem.type,
@@ -56,7 +53,6 @@ class HistoryItem extends React.Component<Props, State> {
 
     return (
       <Paper className={classes.paper} square={true}>
-        <ButtonBase className={classes.buttonbase} onClick={handleClick}>
           {thumbnail}
           <Typography
             component="h2"
@@ -65,7 +61,6 @@ class HistoryItem extends React.Component<Props, State> {
           >
             {item.name}
           </Typography>
-        </ButtonBase>
       </Paper>
     );
   }

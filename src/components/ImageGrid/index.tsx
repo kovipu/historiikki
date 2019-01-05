@@ -1,13 +1,14 @@
 import * as React from 'react';
 
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import * as R from 'ramda';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Grid from '@material-ui/core/Grid';
 import HistoryItem from './HistoryItem';
 import ItemView from '../ItemView';
 import { Item } from '../../@types/globals';
 import { getItems } from '../../api';
+import Link from '../Link';
 
 interface Props {
   classes: {
@@ -39,21 +40,17 @@ class ImageGrid extends React.Component<Props, State> {
 
   public render() {
     const { classes } = this.props;
-    const openItemView = (selected: string) => this.setState({ selected });
-    const closeItemView = () => this.setState({ selected: '' });
-    const selectedItem = R.find((item: Item) => item.id === this.state.selected)(this.state.items);
+    const { items } = this.state;
 
-    const itemView = (
+    const itemView = ({ match }: any) => (
       <ItemView
-        open={this.state.selected !== ''}
-        handleClose={closeItemView}
-        item={selectedItem}
+        item={items.find(i => i.id === match.params.itemId)}
         updateItems={this.updateItems}
       />
     );
 
     return (
-      <>
+      <Router>
         <div className={classes.root}>
           <Grid
             container={true}
@@ -69,17 +66,18 @@ class ImageGrid extends React.Component<Props, State> {
                     item={true}
                     xs={12} sm={6} md={4} lg={3}
                   >
-                    <HistoryItem
-                      item={item}
-                      openItemView={openItemView}
-                    />
+                    <Link to={`/h/${item.id}`}>
+                      <HistoryItem
+                        item={item}
+                      />
+                    </Link>
                   </Grid>
                 ))
             }
           </Grid>
+          <Route path="/h/:itemId" render={itemView} />
         </div>
-        {itemView}
-      </>
+      </Router>
     );
   }
 
