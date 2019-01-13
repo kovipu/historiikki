@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
 
 import { MediaItem } from '../../@types/globals';
 import { getImageURL, getAudioURL } from '../../api';
-import {Icon} from "@material-ui/core";
 
 interface Props {
   itemId: string,
@@ -13,6 +13,7 @@ interface Props {
   classes: {
     medium: string,
     metadata: string,
+    imageWrapper: string,
     image: string,
     video: string,
     audio: string,
@@ -59,26 +60,14 @@ class Medium extends React.Component<Props, State> {
     );
 
     return (
-      <div className={this.props.classes.medium}>
+      <Paper className={this.props.classes.medium}>
         {embeddedMedia}
         <div className={this.props.classes.metadata}>
-          <Typography
-            component="h2"
-            variant="subtitle1"
-          >
-            <Icon>description</Icon>
+          <Typography variant="h6">
             {this.props.mediaItem.name}
           </Typography>
-          <Typography
-              component="h2"
-              variant="subtitle1"
-              gutterBottom={true}
-          >
-            <Icon>calendar_today</Icon>
-            {this.props.mediaItem.date}
-          </Typography>
         </div>
-      </div>
+      </Paper>
     )
   }
 }
@@ -90,11 +79,13 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
         address === ''
           ? 'Ladataan...'
           : (
-            <img
-              alt="embedded image"
-              src={address}
-              className={classes.image}
-            />
+            <div className={classes.imageWrapper}>
+              <img
+                alt="embedded image"
+                src={address}
+                className={classes.image}
+              />
+            </div>
           )
       );
     case 'audio':
@@ -103,10 +94,10 @@ const EmbeddedMedia = (type: 'image' | 'audio' | 'video', address: string, class
           ? 'Ladataan...'
           : (
             <div className={classes.audio}>
-            <audio controls={true}>
-              <source src={address} type="audio/ogg" />
-              Your browser does not support the audio element.
-            </audio>
+              <audio controls={true}>
+                <source src={address} type="audio/ogg" />
+                Your browser does not support the audio element.
+              </audio>
             </div>
           )
       );
@@ -132,8 +123,12 @@ const styles = (theme: Theme) => createStyles({
   metadata: {
     padding: theme.spacing.unit
   },
+  imageWrapper: {
+    textAlign: 'center',
+    backGroundColo: 'grey'
+  },
   image: {
-    width: '100%'
+    maxWidth: '100%'
   },
   video: {
     position: 'absolute',

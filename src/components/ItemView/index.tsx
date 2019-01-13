@@ -1,31 +1,30 @@
 import * as React from 'react';
 
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
 import { Theme, createStyles, withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Collapse from '@material-ui/core/Collapse';
 import Icon from '@material-ui/core/Icon';
-import Link from '../Link';
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
 
 import { Item } from '../../@types/globals';
 import Medium from './Medium';
 import AddNewMedium from './AddNewMedium';
+import Link from '../Link';
 
 interface Props {
   item: Item | undefined,
   updateItems: () => void,
   classes: {
-    dialog: string,
+    appBar: string,
     content: string,
+    backButton: string,
+    backButtonIcon: string,
     contenttext: string,
     newFileButton: string,
-    exitbutton: string
   }
 }
 
@@ -39,7 +38,7 @@ class ItemView extends React.Component<Props, State> {
   };
 
   public render() {
-    const { item, classes} = this.props;
+    const { item, classes } = this.props;
 
     if (item === undefined) {
       return null;
@@ -50,33 +49,46 @@ class ItemView extends React.Component<Props, State> {
     });
 
     return (
-      <Dialog
-        fullScreen={true}
-        open={true}
-        TransitionComponent={Transition}
-        className={classes.dialog}
-      >
-        <DialogTitle>
-          {item.name}
-        </DialogTitle>
+      <div>
+        <AppBar color="primary" position="relative" className={classes.appBar}>
+          <Toolbar>
+            <Link to="/">
+              <IconButton className={classes.backButton}>
+                <Icon className={classes.backButtonIcon}>arrow_back</Icon>
+              </IconButton>
+            </Link>
+            <div>
+              <Typography variant="h5" color="inherit">
+                {item.name}
+              </Typography>
+              <Typography color="inherit">
+              {item.description}
+              </Typography>
+            </div>
+          </Toolbar>
+        </AppBar>
 
-        <DialogContent className={classes.content}>
-          <DialogContentText className={classes.contenttext}>
-            {item.description}
-          </DialogContentText>
+        <div className={classes.content}>
+          <Grid container={true} spacing={8}>
           {
             item.media.map(mediaItem => (
-              <Medium
+              <Grid
+                item={true}
                 key={mediaItem.filename}
-                itemId={item.id}
-                mediaItem={mediaItem}
-              />
+                xs={12} sm={12} md={12} lg={12}
+              >
+                <Medium
+                  key={mediaItem.filename}
+                  itemId={item.id}
+                  mediaItem={mediaItem}
+                />
+              </Grid>
             ))
           }
-
-          <Divider/>
+          </Grid>
 
           <Button
+            variant="raised"
             onClick={handleAddItemClick}
             className={classes.newFileButton}
           >
@@ -88,30 +100,21 @@ class ItemView extends React.Component<Props, State> {
               updateItems={this.props.updateItems}
             />
           </Collapse>
-        </DialogContent>
-
-        <DialogActions>
-          <Link to="/">
-            <Button color="primary" className="exitbutton">
-              Pois
-            </Button>
-          </Link>
-        </DialogActions>
-      </Dialog>
+        </div>
+      </div>
     );
   }
 }
 
-const Transition = (props: any) =>
-  <Slide direction="up" {...props} />;
-
 const styles = (theme: Theme) => createStyles({
-  dialog: {
-    paddingRight: '0 !important',
-    textAlign: 'center',
+  appBar: {
+    paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit
   },
   content: {
-    padding: 0,
+    textAlign: 'center',
+    padding: 4,
+    marginTop: theme.spacing.unit,
     [theme.breakpoints.up('md')]: {
       paddingLeft: '15%',
       paddingRight: '15%'
@@ -121,11 +124,18 @@ const styles = (theme: Theme) => createStyles({
       paddingRight: '30%'
     }
   },
+  backButton: {
+    marginLeft: -12,
+    marginRight: 20
+  },
+  backButtonIcon: {
+    color: 'white'
+  },
   contenttext: {
     marginBottom: theme.spacing.unit
   },
   newFileButton: {
-    marginTop: theme.spacing.unit
+    margin: 2 * theme.spacing.unit
   },
   exitbutton: {
     textDecoration: 'none'

@@ -55,8 +55,7 @@ class HistoryItem extends React.Component<Props, State> {
       <Paper className={classes.paper} square={true}>
           {thumbnail}
           <Typography
-            component="h2"
-            variant="subtitle1"
+            variant="h6"
             gutterBottom={true}
           >
             {item.name}
