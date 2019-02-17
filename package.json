@@ -1,6 +1,10 @@
 {
   "name": "historiikki",
   "version": "0.1.0",
+  "engines": {
+    "node": "10.14.2",
+    "npm": "6.7.0"
+  },
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",
